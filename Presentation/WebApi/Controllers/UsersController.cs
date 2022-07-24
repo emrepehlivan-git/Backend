@@ -20,14 +20,14 @@ namespace WebApi.Controllers
           [HttpPost]
           public async Task<IActionResult> Create(CreateUserCommand command)
           {
-               UserResponseDTO res = await _mediator.Send(command);
+               var res = await _mediator.Send(command);
                return Ok(res);
           }
 
           [HttpPut]
           public async Task<IActionResult> Update(UpdateUserCommand command)
           {
-               UserResponseDTO res = await _mediator.Send(command);
+               var res = await _mediator.Send(command);
                return Ok(res);
           }
      }

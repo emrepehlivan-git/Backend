@@ -9,7 +9,7 @@ namespace Application.Mappings
 {
      public class UserProfile : Profile
      {
-          public UserProfile()
+          public UserProfile ( )
           {
                CreateMap<AppUser, CreateUserRequestDTO>().ReverseMap();
                CreateMap<AppUser, UpdateUserRequestDTO>().ReverseMap();

@@ -1,25 +1,26 @@
 ﻿using Application.DTOs.Category;
 using Application.Repositories;
+using Application.Wrappers;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.Features.Commands.Categories.CreateCategory
 {
-     public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, CategoryResponseDTO>
+     public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, ServiceResponse<CategoryResponseDTO>>
      {
           readonly ICategoryWriteRepository _categoryWriteRepository;
           readonly ICategoryReadRepository _categoryReadRepository;
           readonly IMapper _mapper;
 
-          public CreateCategoryCommandHandler(ICategoryWriteRepository categoryWriteRepository, IMapper mapper, ICategoryReadRepository categoryReadRepository)
+          public CreateCategoryCommandHandler (ICategoryWriteRepository categoryWriteRepository, IMapper mapper, ICategoryReadRepository categoryReadRepository)
           {
                _categoryWriteRepository = categoryWriteRepository;
                _mapper = mapper;
                _categoryReadRepository = categoryReadRepository;
           }
 
-          public async Task<CategoryResponseDTO> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+          public async Task<ServiceResponse<CategoryResponseDTO>> Handle (CreateCategoryCommand request, CancellationToken cancellationToken)
           {
                var found = await _categoryReadRepository.GetSingleAsync(c => c.Name == request.Name);
 
@@ -28,10 +29,10 @@ namespace Application.Features.Commands.Categories.CreateCategory
                else
                {
                     Category category = _mapper.Map<Category>(request);
-                    var data = await _categoryWriteRepository.AddAsync(category);
+                    await _categoryWriteRepository.AddAsync(category);
                     await _categoryWriteRepository.SaveAsync();
                     CategoryResponseDTO response = _mapper.Map<CategoryResponseDTO>(category);
-                    return response;
+                    return new ServiceResponse<CategoryResponseDTO>(response, true);
                }
           }
      }

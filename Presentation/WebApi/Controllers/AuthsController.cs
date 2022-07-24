@@ -1,5 +1,4 @@
-﻿using Application.DTOs.Auth;
-using Application.Features.Commands.AppUsers.LoginUser;
+﻿using Application.Features.Commands.AppUsers.LoginUser;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,15 +10,15 @@ namespace WebApi.Controllers
      {
           readonly IMediator _mediator;
 
-          public AuthsController(IMediator mediator)
+          public AuthsController (IMediator mediator)
           {
                _mediator = mediator;
           }
 
           [HttpPost]
-          public async Task<IActionResult> Login(LoginUserCommand command)
+          public async Task<IActionResult> Login (LoginUserCommand command)
           {
-               Token res = await _mediator.Send(command);
+               var res = await _mediator.Send(command);
                return Ok(res);
           }
      }

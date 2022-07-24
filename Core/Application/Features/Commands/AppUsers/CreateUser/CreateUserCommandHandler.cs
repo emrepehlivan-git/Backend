@@ -1,11 +1,12 @@
 ﻿using Application.Abstractions.Services;
 using Application.DTOs.AppUser;
+using Application.Wrappers;
 using AutoMapper;
 using MediatR;
 
 namespace Application.Features.Commands.AppUsers.CreateUser
 {
-     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserResponseDTO>
+     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, ServiceResponse<UserResponseDTO>>
      {
           readonly IUserService _userService;
           readonly IMapper _mapper;
@@ -16,12 +17,12 @@ namespace Application.Features.Commands.AppUsers.CreateUser
                _mapper = mapper;
           }
 
-          public async Task<UserResponseDTO> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+          public async Task<ServiceResponse<UserResponseDTO>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
           {
                CreateUserRequestDTO data = _mapper.Map<CreateUserRequestDTO>(request);
                UserResponseDTO result = await _userService.CreateAsync(data);
-
-               return result;
+               var response = new ServiceResponse<UserResponseDTO>(result, true);
+               return await Task.FromResult(response);
           }
      }
 }

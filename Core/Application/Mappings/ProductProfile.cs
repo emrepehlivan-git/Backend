@@ -6,20 +6,23 @@ using Domain.Entities;
 
 namespace Application.Mappings
 {
-     public class ProductProfile : Profile
-     {
-          public ProductProfile()
-          {
-               CreateMap<Product, ProductsResponseDTO>()
-                         .ForMember(dest => dest.CategoryName,
-                              opt => opt.MapFrom(src => src.Category.Name)
-                         ).ReverseMap();
+    public class ProductProfile : Profile
+    {
+        public ProductProfile()
+        {
+            CreateMap<Product, ProductsResponseDTO>()
+                      .ForMember(dest => dest.CategoryName,
+                           opt => opt.MapFrom(src => src.Category.Name)
+                      ).ReverseMap();
 
-               CreateMap<Product, UpdateProductResponseDTO>().ReverseMap();
+            CreateMap<Product, UpdateProductResponseDTO>().ReverseMap();
 
-               CreateMap<Product, CreateProductCommand>().ReverseMap();
+            CreateMap<Product, CreateProductCommand>().ReverseMap();
 
-               CreateMap<Product, UpdateProductCommand>().ReverseMap();
-          }
-     }
+            CreateMap<Product, UpdateProductCommand>()
+            .ForMember(dest => dest.CategoryId,
+                opt => opt.MapFrom(src => src.CategoryId)
+            ).ReverseMap();
+        }
+    }
 }

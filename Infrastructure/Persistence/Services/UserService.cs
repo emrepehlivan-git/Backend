@@ -3,6 +3,7 @@ using Application.DTOs.AppUser;
 using AutoMapper;
 using Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
+using Persistence.Exceptions;
 
 namespace Persistence.Services
 {
@@ -11,13 +12,13 @@ namespace Persistence.Services
           readonly UserManager<AppUser> _userManager;
           readonly IMapper _mapper;
 
-          public UserService(UserManager<AppUser> userManager, IMapper mapper)
+          public UserService (UserManager<AppUser> userManager, IMapper mapper)
           {
                _userManager = userManager;
                _mapper = mapper;
           }
 
-          public async Task<UserResponseDTO> CreateAsync(CreateUserRequestDTO user)
+          public async Task<UserResponseDTO> CreateAsync (CreateUserRequestDTO user)
           {
                IdentityResult result = await _userManager.CreateAsync(new()
                {
@@ -33,11 +34,11 @@ namespace Persistence.Services
                }
                else
                {
-                    throw new Exception($"{result.Errors?.FirstOrDefault()?.Description}");
+                    throw new UserException($"{result.Errors?.FirstOrDefault()?.Description}");
                }
           }
 
-          public async Task<UserResponseDTO> UpdateAsync(UpdateUserRequestDTO user)
+          public async Task<UserResponseDTO> UpdateAsync (UpdateUserRequestDTO user)
           {
                AppUser data = _mapper.Map<AppUser>(user);
 
@@ -49,7 +50,7 @@ namespace Persistence.Services
                }
                else
                {
-                    throw new Exception($"{result.Errors?.FirstOrDefault()?.Description}");
+                    throw new UserException($"{result.Errors?.FirstOrDefault()?.Description}");
                }
           }
      }

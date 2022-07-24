@@ -3,15 +3,13 @@ using FluentValidation;
 
 namespace Application.Validators.Products
 {
-     public class UpdateProductValidator : AbstractValidator<UpdateProductCommand>
-     {
-          public UpdateProductValidator()
-          {
-               RuleFor(x => x.Id).NotEmpty().NotNull();
-               RuleFor(x => x.Name).NotEmpty().NotNull();
-               RuleFor(x => x.Description).NotEmpty().NotNull();
-               RuleFor(x => x.Price).NotEmpty().NotNull().GreaterThan(0);
-               RuleFor(x => x.Stock).NotEmpty().NotNull().Must(s => s >= 0);
-          }
-     }
+    public class UpdateProductValidator : AbstractValidator<UpdateProductCommand>
+    {
+        public UpdateProductValidator()
+        {
+            RuleFor(x => x.Description).MinimumLength(3);
+            RuleFor(x => x.Price).Must(s => s >= 0).When(x => x.Price != null);
+            RuleFor(x => x.Stock).Null().Must(s => s >= 0).When(x => x.Stock != null);
+        }
+    }
 }

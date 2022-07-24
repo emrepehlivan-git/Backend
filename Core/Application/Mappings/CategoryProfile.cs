@@ -8,13 +8,14 @@ namespace Application.Mappings
 {
      public class CategoryProfile : Profile
      {
-          public CategoryProfile()
+          public CategoryProfile ( )
           {
-               CreateMap<Category, CategoryResponseDTO>();
+               CreateMap<Category, CategoryResponseDTO>().ReverseMap();
                CreateMap<Category, CreateCategoryCommand>()
                     .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                     .ReverseMap();
                CreateMap<Category, UpdateCategoryCommand>().ReverseMap();
+               CreateMap<Category, CategoryRequestDTO>().ReverseMap();
           }
      }
 }
